@@ -1,85 +1,59 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import GameBoard from '@/components/GameBoard.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div class="app-shell">
+    <header class="app-header">
+      <h1 class="title">Tic Tac Toe</h1>
+      <p class="subtitle">Two-player • Local</p>
+    </header>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <main class="app-main">
+      <GameBoard />
+    </main>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    <footer class="app-footer">
+      <small>Built with Vue 3 • Ocean Professional theme</small>
+    </footer>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--ocean-background);
+  color: var(--ocean-text);
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+.app-header {
   text-align: center;
-  margin-top: 2rem;
+  padding: 2rem 1rem 0.5rem;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--ocean-primary);
+  letter-spacing: 0.2px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.subtitle {
+  color: #6b7280;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.app-main {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
 }
 
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.app-footer {
+  text-align: center;
+  padding: 1rem 0 2rem;
+  color: #6b7280;
+  font-size: 0.85rem;
 }
 </style>

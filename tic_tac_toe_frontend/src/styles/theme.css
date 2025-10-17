@@ -1,0 +1,18 @@
+:root {
+  --ocean-primary: #2563EB;
+  --ocean-secondary: #F59E0B;
+  --ocean-success: #F59E0B;
+  --ocean-error: #EF4444;
+  --ocean-background: #f9fafb;
+  --ocean-surface: #ffffff;
+  --ocean-text: #111827;
+}
+
+html, body {
+  background: var(--ocean-background);
+  color: var(--ocean-text);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
