@@ -5,8 +5,6 @@ import Cell from './Cell.vue'
 type Player = 'X' | 'O'
 type Mark = Player | null
 
-// Ocean Professional theme color variables from CSS vars (used as classes/styles in template)
-
 // Board state: 9 cells
 const state = reactive({
   board: Array<Mark>(9).fill(null),
@@ -73,9 +71,10 @@ function restartGame() {
 }
 
 const statusText = computed(() => {
-  if (state.winner) return `Winner: ${state.winner}`
+  // Keep narrative but avoid announcing single letters only
+  if (state.winner) return `Winner: ${state.winner === 'X' ? 'Knight' : 'Queen'}`
   if (state.isDraw) return 'Draw!'
-  return `Current Player: ${state.currentPlayer}`
+  return `Current Player: ${state.currentPlayer === 'X' ? 'Knight' : 'Queen'}`
 })
 
 const statusClass = computed(() => {
@@ -83,13 +82,23 @@ const statusClass = computed(() => {
   if (state.isDraw) return 'status status--draw'
   return 'status'
 })
+
+// Small helpers for chip visuals and a11y labels
+const currentPlayerGlyph = computed(() => (state.currentPlayer === 'X' ? '♞' : '♛'))
+const currentPlayerLabel = computed(() => (state.currentPlayer === 'X' ? 'Knight' : 'Queen'))
 </script>
 
 <template>
   <section class="board-card" aria-label="Tic Tac Toe game board">
     <div class="status-bar">
-      <div class="chip" :class="state.currentPlayer === 'X' ? 'chip--x' : 'chip--o'">
-        {{ state.currentPlayer }}
+      <div
+        class="chip"
+        :class="state.currentPlayer === 'X' ? 'chip--x' : 'chip--o'"
+        role="img"
+        :aria-label="currentPlayerLabel"
+        :title="currentPlayerLabel"
+      >
+        {{ currentPlayerGlyph }}
       </div>
       <p :class="statusClass" role="status" aria-live="polite">{{ statusText }}</p>
     </div>
@@ -106,7 +115,7 @@ const statusClass = computed(() => {
         :index="idx"
         :mark="mark"
         :disabled="state.gameOver || mark !== null"
-        :aria-label="`Cell ${idx + 1}, ${mark ? mark : 'empty'}`"
+        :aria-label="`Cell ${idx + 1}, ${mark ? (mark === 'X' ? 'Knight' : 'Queen') : 'empty'}`"
         @select="handleCellClick"
       />
     </div>
@@ -150,9 +159,11 @@ const statusClass = computed(() => {
   display: grid;
   place-items: center;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
   color: white;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+  font-size: 1.1rem;
+  line-height: 1;
 }
 .chip--x { background: var(--ocean-primary); }
 .chip--o { background: var(--ocean-secondary); }

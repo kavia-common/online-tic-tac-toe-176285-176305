@@ -16,6 +16,19 @@ const emit = defineEmits<{
   (e: 'select', index: number): void
 }>()
 
+// Compute piece character and aria-label for accessibility
+const pieceChar = computed(() => {
+  if (props.mark === 'X') return '♞' // Knight
+  if (props.mark === 'O') return '♛' // Queen
+  return ''
+})
+
+const pieceLabel = computed(() => {
+  if (props.mark === 'X') return 'Knight'
+  if (props.mark === 'O') return 'Queen'
+  return ''
+})
+
 const classes = computed(() => {
   return [
     'cell',
@@ -41,12 +54,25 @@ function onClick() {
     @click="onClick"
   >
     <div :class="classes">
-      <span v-if="mark" class="symbol">{{ mark }}</span>
+      <!-- Use emoji pieces for lightweight rendering; expose accessible label -->
+      <span
+        v-if="mark"
+        class="symbol"
+        role="img"
+        :aria-label="pieceLabel"
+      >
+        {{ pieceChar }}
+      </span>
     </div>
   </button>
 </template>
 
 <style scoped>
+:root {
+  /* Provide overridable sizing var for pieces */
+  --piece-size: 2.5rem;
+}
+
 .cell-wrapper {
   appearance: none;
   background: transparent;
@@ -88,11 +114,17 @@ function onClick() {
 }
 
 .symbol {
-  font-size: 2.5rem;
+  font-size: var(--piece-size);
+  line-height: 1;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 0; /* chess glyphs don't need extra spacing */
+  display: inline-grid;
+  place-items: center;
+  transform: translateZ(0);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
+/* Theme colors for X (Knight) and O (Queen) */
 .cell--x .symbol {
   color: var(--ocean-primary);
   text-shadow: 0 2px 10px rgba(37,99,235,0.25);
@@ -105,6 +137,6 @@ function onClick() {
 
 @media (max-width: 420px) {
   .cell { height: 88px; width: 88px; }
-  .symbol { font-size: 2.2rem; }
+  .symbol { font-size: calc(var(--piece-size) * 0.88); }
 }
 </style>
